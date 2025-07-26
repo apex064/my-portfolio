@@ -37,7 +37,7 @@ export function Hero() {
         <motion.a
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          href="#"
+          href="cv.pdf"
           download
           className="inline-block border-2 border-[--color-neon] text-[--color-neon] px-6 py-3 rounded-full font-semibold hover:bg-[--color-neon] hover:text-black transition-all duration-300"
         >
