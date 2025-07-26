@@ -8,7 +8,7 @@ export function Testimonials() {
     },
     {
       quote: "His design sensibility and attention to code structure felt truly world‑class.",
-      author: "Product Owner",
+      author: "mr awesome",
     },
   ];
 
