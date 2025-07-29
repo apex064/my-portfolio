@@ -1,4 +1,5 @@
-import { motion } from 'motion/react';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { useEffect, useRef } from 'react';
 import { Github, Linkedin, Twitter } from 'lucide-react';
 
 export function Footer() {
@@ -20,13 +21,36 @@ export function Footer() {
     },
   ];
 
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const rotateX = useTransform(y, [0, 1], [6, -6]);
+  const rotateY = useTransform(x, [0, 1], [-6, 6]);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const bounds = ref.current?.getBoundingClientRect();
+      if (!bounds) return;
+
+      const xValue = (e.clientX - bounds.left) / bounds.width;
+      const yValue = (e.clientY - bounds.top) / bounds.height;
+
+      x.set(xValue);
+      y.set(yValue);
+    };
+
+    const node = ref.current;
+    node?.addEventListener('mousemove', handleMouseMove);
+    return () => node?.removeEventListener('mousemove', handleMouseMove);
+  }, [x, y]);
+
   return (
     <motion.footer
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
-      className="bg-zinc-900 text-center py-10"
+      ref={ref}
+      style={{ rotateX, rotateY }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      className="bg-zinc-900 text-center py-10 rounded-xl"
     >
       <div className="flex justify-center gap-6 mb-4">
         {socialLinks.map((link) => {
@@ -60,3 +84,4 @@ export function Footer() {
     </motion.footer>
   );
 }
+

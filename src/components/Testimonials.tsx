@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion'; // correct import
+import { motion } from 'framer-motion';
+import Tilt from 'react-parallax-tilt';
 
 export function Testimonials() {
   const testimonials = [
@@ -24,21 +25,26 @@ export function Testimonials() {
       <h2 className="text-2xl font-bold text-center mb-12">Testimonials</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {testimonials.map((testimonial, index) => (
-          <motion.div
+          <Tilt
+            tiltMaxAngleX={10}
+            tiltMaxAngleY={10}
+            glareEnable={true}
+            glareMaxOpacity={0.2}
+            scale={1.02}
+            transitionSpeed={250}
             key={index}
-            initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: index * 0.2 }}
-            whileHover={{
-              scale: 1.05,
-              boxShadow: "0 10px 20px rgba(255, 255, 255, 0.2)",
-            }}
-            className="bg-white/10 p-6 rounded-xl transition-all duration-300 cursor-pointer"
           >
-            <p className="text-gray-300 italic mb-4">"{testimonial.quote}"</p>
-            <strong className="block text-gray-100">– {testimonial.author}</strong>
-          </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.2 }}
+              className="bg-white/10 p-6 rounded-xl transition-all duration-300 cursor-pointer"
+            >
+              <p className="text-gray-300 italic mb-4">"{testimonial.quote}"</p>
+              <strong className="block text-gray-100">– {testimonial.author}</strong>
+            </motion.div>
+          </Tilt>
         ))}
       </div>
     </motion.section>

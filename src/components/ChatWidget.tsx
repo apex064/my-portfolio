@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import { MessageCircle, X, Send } from 'lucide-react';
 
 interface Message {
@@ -31,7 +31,7 @@ export function ChatWidget() {
       timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, newMessage]);
+    setMessages((prev) => [...prev, newMessage]);
     setInputValue('');
 
     // Simulate bot response
@@ -42,7 +42,7 @@ export function ChatWidget() {
         isUser: false,
         timestamp: new Date(),
       };
-      setMessages(prev => [...prev, botResponse]);
+      setMessages((prev) => [...prev, botResponse]);
     }, 800);
   };
 
@@ -52,12 +52,40 @@ export function ChatWidget() {
     }
   };
 
+  // Tilt effect logic
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const rotateX = useTransform(y, [0, 1], [6, -6]);
+  const rotateY = useTransform(x, [0, 1], [-6, 6]);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const bounds = ref.current?.getBoundingClientRect();
+      if (!bounds) return;
+
+      const xValue = (e.clientX - bounds.left) / bounds.width;
+      const yValue = (e.clientY - bounds.top) / bounds.height;
+
+      x.set(xValue);
+      y.set(yValue);
+    };
+
+    const node = ref.current;
+    if (node) {
+      node.addEventListener('mousemove', handleMouseMove);
+      return () => node.removeEventListener('mousemove', handleMouseMove);
+    }
+  }, [x, y]);
+
   return (
     <>
       {/* Chat Container */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            ref={ref}
+            style={{ rotateX, rotateY }}
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -124,3 +152,4 @@ export function ChatWidget() {
     </>
   );
 }
+
