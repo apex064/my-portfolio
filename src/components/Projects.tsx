@@ -24,7 +24,7 @@ export function Projects() {
       title: 'Custom Linux OS',
       description: 'Custom Linux OS (in development)',
       image: linuxOS,
-      link: 'https://github.com/apex064/apexos-trixie',
+      link: 'https://github.com/apex064/apex0s',
     },
     {
       title: 'Trading Bot',
