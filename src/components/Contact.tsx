@@ -1,5 +1,6 @@
-import { motion } from 'motion/react'; // ✅ Ensure you're using the right motion lib (framer-motion)
+import { motion } from 'framer-motion';
 import { useState } from 'react';
+import axios from 'axios';
 import { toast } from 'sonner';
 import Tilt from 'react-parallax-tilt';
 
@@ -21,11 +22,15 @@ export function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    toast.success("Message sent successfully! I'll get back to you soon.");
-    setFormData({ name: '', email: '', message: '' });
+
+    try {
+      await axios.post('/api/messages', formData);
+      toast.success("Message sent successfully! I'll get back to you soon.");
+      setFormData({ name: '', email: '', message: '' });
+    } catch (err) {
+      toast.error('Failed to send message. Try again later.');
+    }
+
     setIsSubmitting(false);
   };
 

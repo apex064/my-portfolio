@@ -8,6 +8,7 @@ export function Header() {
     { href: '#projects', label: 'Projects' },
     { href: '#testimonials', label: 'Testimonials' },
     { href: '#contact', label: 'Contact' },
+    { href: '/admin/login', label: 'Admin' },
   ];
 
   const ref = useRef<HTMLDivElement>(null);

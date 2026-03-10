@@ -9,8 +9,18 @@ import { ChatWidget } from './components/ChatWidget';
 import { Footer } from './components/Footer';
 import { Toaster } from './components/ui/sonner';
 
+// admin
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Login } from './admin/Login';
+import { Dashboard } from './admin/Dashboard';
+
 export default function App() {
-  return (
+  function PrivateRoute({ children }: { children: JSX.Element }) {
+    const token = localStorage.getItem('token');
+    return token ? children : <Navigate to="/admin/login" replace />;
+  }
+
+  const home = (
     <div className="min-h-screen bg-black text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Header />
@@ -36,5 +46,19 @@ export default function App() {
         }}
       />
     </div>
+  );
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={home} />
+        <Route path="/admin/login" element={<Login />} />
+        <Route
+          path="/admin/dashboard"
+          element={<PrivateRoute><Dashboard /></PrivateRoute>}
+        />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </BrowserRouter>
   );
 }

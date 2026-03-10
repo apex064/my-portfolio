@@ -67,3 +67,68 @@ export default tseslint.config([
   },
 ])
 ```
+
+---
+
+## Backend & Admin Dashboard (TypeScript)
+
+This project now includes a full TypeScript backend powered by **Express** and **Prisma** (SQLite by default) along with a simple admin dashboard on the frontend. The API handles dynamic content (projects, skills, testimonials, etc.) and supports image uploads.
+
+### Getting started
+
+1. **Server dependencies**
+
+   ```bash
+   cd server
+   npm install          # or yarn
+   cp .env.example .env # adjust DATABASE_URL & JWT_SECRET
+   ```
+
+2. **Initialize the database**
+
+   ```bash
+   npm run prisma:generate   # install client
+   npm run prisma:migrate    # create SQLite file and tables (run again after updating schema)
+   ```
+
+3. **Run in development**
+
+   ```bash
+   # start frontend and backend together from project root
+   npm run dev:all
+
+   # or run individually
+   cd server && npm run dev
+   # and in another terminal from root: npm run dev
+   ```
+
+   Backend will listen on `http://localhost:4000` and exposes endpoints under `/api/...`.
+
+4. **Create an admin user**
+
+   ```bash
+   curl -X POST http://localhost:4000/api/auth/create \
+     -H 'Content-Type: application/json' \
+     -d '{"email":"admin@example.com","password":"secret"}'
+   ```
+
+   After seeding, you can remove or protect the `/create` route.
+
+5. **Frontend admin dashboard**
+
+   A new `src/admin` directory contains React components for login and CRUD forms.  Login returns a JWT which should be stored and sent in the `Authorization` header for protected requests.  Only the projects UI is scaffolded as an example, but you can add similar forms for skills, testimonials, messages or any model.
+
+   The API exposes the following base endpoints (unauthenticated GETs, other actions require a token):
+   - `/api/projects`
+   - `/api/skills`
+   - `/api/testimonials`
+   - `/api/messages` (POST for contact form, GET for admin)
+
+   Image uploads go to `/api/projects/upload` and return a static path.
+
+   Use the `/api/projects/upload` endpoint with `multipart/form-data` to store images in `server/uploads` and return a path usable by the frontend.
+
+---
+
+Please refer to the code in `server/src` for route/controller examples; adapting other models (skills, testimonials, etc.) follows the same pattern.
+

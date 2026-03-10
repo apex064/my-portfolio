@@ -1,17 +1,14 @@
 import { motion } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export function Testimonials() {
-  const testimonials = [
-    {
-      quote: "Apex064 delivered polished, high-performance code exactly as promised.",
-      author: "Mattys Inc",
-    },
-    {
-      quote: "His design sensibility and attention to code structure felt truly world‑class.",
-      author: "mr awesome",
-    },
-  ];
+  const [testimonials, setTestimonials] = useState<any[]>([]);
+
+  useEffect(() => {
+    axios.get('/api/testimonials').then((res) => setTestimonials(res.data));
+  }, []);
 
   return (
     <motion.section
