@@ -12,7 +12,7 @@
     "server:build": "cd server && npm run build",
     "server:prisma": "cd server && npm run prisma:migrate",
     "dev:all": "concurrently \"npm run dev\" \"npm run server:dev\"",
-    "vercel-build": "npm run build && cd server && npm install && npm run prisma:migrate && npm run build"
+    "vercel-build": "npm install --include=dev && npm run build && cd server && npm install && npm run prisma:migrate && npm run build"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.11",

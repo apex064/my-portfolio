@@ -1,14 +1,13 @@
 import api from './api';
-import { Project } from '../types';
+import type { Project } from '../types';
 
 interface Props {
   projects: Project[];
   onEdit: (p: Project) => void;
   onDeleted: () => void;
-  headers?: Record<string, string>;
 }
 
-export function ProjectList({ projects, onEdit, onDeleted, headers }: Props) {
+export function ProjectList({ projects, onEdit, onDeleted }: Props) {
   const deleteProject = async (id: number) => {
     await api.delete(`/api/projects/${id}`);
     onDeleted();

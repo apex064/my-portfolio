@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
 import api from './api';
-import { Project } from '../types';
+import type { Project } from '../types';
 
 interface Props {
   editing: Project | null;
   onSaved: () => void;
   onCancel: () => void;
-  headers?: Record<string, string>;
 }
 
-export function ProjectForm({ editing, onSaved, onCancel, headers }: Props) {
+export function ProjectForm({ editing, onSaved, onCancel }: Props) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [link, setLink] = useState('');
@@ -30,6 +29,7 @@ export function ProjectForm({ editing, onSaved, onCancel, headers }: Props) {
   }, [editing]);
 
   const submit = async (e: React.FormEvent) => {
+    // headers prop not used anymore
     e.preventDefault();
     let imageUrl = editing?.image;
 

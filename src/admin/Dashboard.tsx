@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import api from './api';
-import { Project } from '../types';
+import type { Project } from '../types';
 import { ProjectList } from './ProjectList';
 import { ProjectForm } from './ProjectForm';
 

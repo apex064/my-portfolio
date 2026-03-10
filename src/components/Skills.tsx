@@ -10,14 +10,17 @@ export function Skills() {
     axios.get('/api/skills').then((res) => {
       // expecting flat list, group by category if you store a category field in the DB
       // for simplicity we assume `title` == category if available
-      const categories: any = {};
+      const categories: Record<string, any[]> = {};
       res.data.forEach((s: any) => {
         const cat = s.category || 'Misc';
         if (!categories[cat]) categories[cat] = [];
         categories[cat].push(s);
       });
       setSkillCategories(
-        Object.entries(categories).map(([title, skills]) => ({ title, skills }))
+        Object.entries(categories).map(([title, skills]) => ({
+          title,
+          skills: skills as { name: string; icon?: string }[],
+        }))
       );
     });
   }, []);
