@@ -87,7 +87,7 @@ This project now includes a full TypeScript backend powered by **Express** and *
 2. **Initialize the database**
 
    ```bash
-   npm run prisma:generate   # install client
+   npm run prisma:generate   # install client (Prisma 6+)
    npm run prisma:migrate    # create SQLite file and tables (run again after updating schema)
    ```
 
