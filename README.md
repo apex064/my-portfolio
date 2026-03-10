@@ -106,13 +106,17 @@ This project now includes a full TypeScript backend powered by **Express** and *
 
 4. **Create an admin user**
 
+   You can still use the `/api/auth/create` endpoint for initial seeding, but the server will now automatically create an admin user if none exists at startup.
+   Set the following environment variables before running the server (use Vercel project settings for deployment):
+
    ```bash
-   curl -X POST http://localhost:4000/api/auth/create \
-     -H 'Content-Type: application/json' \
-     -d '{"email":"admin@example.com","password":"secret"}'
+   ADMIN_EMAIL=admin@example.com
+   ADMIN_PASSWORD=secret
    ```
 
-   After seeding, you can remove or protect the `/create` route.
+   When the backend starts it checks for a user with that email; if missing it hashes the password and creates the record.  You may remove or secure the `/create` route after confirming the account is seeded.
+
+   **Persistent database** – SQLite’s file is wiped on each deploy. Use a managed database service (Postgres, MySQL, MariaDB, etc.) and point `DATABASE_URL` at it. Services like [Supabase](https://supabase.com), [Neon](https://neon.tech), [PlanetScale](https://planetscale.com) or Heroku Postgres work well with Prisma. Once you update `DATABASE_URL` you can run `npm run server:prisma` to apply migrations to the remote database.
 
 5. **Frontend admin dashboard**
 
@@ -131,4 +135,21 @@ This project now includes a full TypeScript backend powered by **Express** and *
 ---
 
 Please refer to the code in `server/src` for route/controller examples; adapting other models (skills, testimonials, etc.) follows the same pattern.
+
+---
+
+### Monorepo deployment (single Vercel project)
+
+A `vercel.json` has been included at the repository root along with a custom
+`vercel-build` script in `package.json`. When you create a Vercel project pointing
+at this repo, the platform will:
+
+1. run `npm run vercel-build` (builds frontend & backend)
+2. route requests matching `/api/*` to the server function at `server/src/index.ts`
+3. serve static files from `dist` and forward `/uploads/*` to `server/uploads`
+
+No additional configuration is required—simply set the usual environment
+variables (`JWT_SECRET`, `DATABASE_URL`, plus any `VITE_…` vars) in the Vercel
+dashboard. Note that the filesystem is ephemeral, so uploaded files won’t persist
+between deployments; for production use an external storage service.
 

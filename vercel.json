@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dist" }
+    },
+    {
+      "src": "server/src/index.ts",
+      "use": "@vercel/node",
+      "config": { "includeFiles": ["server/dist/**"] }
+    }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/server/src/index.ts" },
+    { "src": "/uploads/(.*)", "dest": "/server/uploads/$1" },
+    { "src": "/(.*)", "dest": "/dist/$1" }
+  ]
+}

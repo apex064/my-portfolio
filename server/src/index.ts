@@ -29,6 +29,20 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
 });
 
+// automatic admin seed: if no user exists, create one from env vars
+async function ensureAdmin() {
+  const email = process.env.ADMIN_EMAIL;
+  const pass = process.env.ADMIN_PASSWORD;
+  if (!email || !pass) return;
+  const existing = await prisma.user.findUnique({ where: { email } });
+  if (!existing) {
+    const hash = await import('bcrypt').then(b => b.hash(pass, 10));
+    await prisma.user.create({ data: { email, password: hash } });
+    console.log('Admin user seeded:', email);
+  }
+}
+
 app.listen(PORT, () => {
   console.log(`Server listening on http://localhost:${PORT}`);
+  ensureAdmin().catch(e => console.error('seeding admin failed', e));
 });
