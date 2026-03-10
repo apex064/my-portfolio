@@ -15,8 +15,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Login } from './admin/Login';
 import { Dashboard } from './admin/Dashboard';
 
-export default function App() {
-  function PrivateRoute({ children }: { children: JSX.Element }) {
+export default function App(): React.ReactElement {
+  function PrivateRoute({ children }: { children: React.ReactNode }) {
     const token = localStorage.getItem('token');
     return token ? children : <Navigate to="/admin/login" replace />;
   }
